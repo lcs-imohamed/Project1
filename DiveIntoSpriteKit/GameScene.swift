@@ -12,7 +12,7 @@ import SpriteKit
 class GameScene: SKScene {
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
-        //Change background to space
+        //Add and position space background in scene 
         let background = SKSpriteNode(imageNamed: "space.jpg")
         background.zPosition = -1
         addChild(background)
