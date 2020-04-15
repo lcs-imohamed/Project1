@@ -16,6 +16,19 @@ class GameScene: SKScene {
         let background = SKSpriteNode(imageNamed: "space.jpg")
         background.zPosition = -1
         addChild(background)
+        
+        //Add space dust particles to scene
+        if let particles = SKEmitterNode(fileNamed: "SpaceDust") {
+            particles.advanceSimulationTime(10)
+            particles.position.x = 512
+            addChild(particles)
+            
+        //Add player to scene
+            let player = SKSpriteNode(imageNamed: "player-rocket.png")
+            player.position.x = -400
+            addChild(player)
+            
+        }
     }
     
     
