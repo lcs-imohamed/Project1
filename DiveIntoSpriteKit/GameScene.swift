@@ -37,6 +37,8 @@ class GameScene: SKScene {
     // MARK: Properties
     var touchingPlayer = false
     let player = SKSpriteNode(imageNamed: "player-rocket.png")
+    var gameTimer: Timer?
+    
     
     // MARK: Initializers
     
@@ -102,6 +104,15 @@ class GameScene: SKScene {
 
     override func update(_ currentTime: TimeInterval) {
         // this method is called before each frame is rendered
+    }
+    
+    func createEnemy() {
+        //Add and position enemy ship in scene
+        let sprite = SKSpriteNode(imageNamed: "enemy-ship")
+        sprite.position = CGPoint(x: 1200, y: Int.random(in: -350...350))
+        sprite.name = "enemy"
+        sprite.zPosition = 1
+        addChild(sprite)
     }
     
     
