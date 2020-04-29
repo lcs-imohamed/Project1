@@ -26,7 +26,7 @@ class Person {
     func birthday() {
         age += 1
     }
-
+    
 }
 
 
@@ -57,14 +57,18 @@ class GameScene: SKScene {
             particles.position.x = 512
             addChild(particles)
             
-        //Add player to scene
+            //Add player to scene
             
             
-            player.position.x = -400
+            player.position.x = -400 
             player.zPosition = 1
             addChild(player)
             
         }
+        
+            //Create timer to call function create enemy every 35 seconds
+            gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        
     }
     
     
@@ -96,12 +100,12 @@ class GameScene: SKScene {
         let location = touch.location(in: self)
         player.position = location
     }
-
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // this method is called when the user stops touching the screen
         touchingPlayer = false
     }
-
+    
     override func update(_ currentTime: TimeInterval) {
         // this method is called before each frame is rendered
     }
@@ -109,10 +113,17 @@ class GameScene: SKScene {
     func createEnemy() {
         //Add and position enemy ship in scene
         let sprite = SKSpriteNode(imageNamed: "enemy-ship")
+        print(self.size.height)
         sprite.position = CGPoint(x: 1200, y: Int.random(in: -350...350))
         sprite.name = "enemy"
         sprite.zPosition = 1
         addChild(sprite)
+        
+        //Add physics body to sprite
+        sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
+        sprite.physicsBody?.linearDamping = 0
+        
     }
     
     
