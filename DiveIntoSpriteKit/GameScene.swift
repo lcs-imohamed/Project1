@@ -8,31 +8,30 @@
 
 import SpriteKit
 
-class Person {
-    
-    // MARK: Properties
-    var hairColor : String
-    var age: Int
-    
-    // MARK: Initializers
-    init(hairColor: String, age: Int) {
-        self.hairColor = hairColor
-        self.age = age
-    }
-    
-    // MARK: Methods
-    
-    // Purpose: Increase the age by one
-    func birthday() {
-        age += 1
-    }
-    
-}
+
+
+//    // MARK: Properties
+//    var hairColor : String
+//    var age: Int
+//
+//    // MARK: Initializers
+//    init(hairColor: String, age: Int) {
+//        self.hairColor = hairColor
+//        self.age = age
+//    }
+//
+//    // MARK: Methods
+//
+//    // Purpose: Increase the age by one
+//    func birthday() {
+//        age += 1
+//    }
+
 
 
 
 @objcMembers
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Properties
     var touchingPlayer = false
@@ -64,10 +63,19 @@ class GameScene: SKScene {
             player.zPosition = 1
             addChild(player)
             
+            //Report all contacts to game scene
+            physicsWorld.contactDelegate = self
+            
         }
         
-            //Create timer to call function create enemy every 35 seconds
-            gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        //Create timer to call function create enemy every 35 seconds
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        
+        //Add physics body to rocket
+        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+        
+        //Give physics body a category
+        player.physicsBody?.categoryBitMask = 1
         
     }
     
@@ -124,8 +132,34 @@ class GameScene: SKScene {
         sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
         sprite.physicsBody?.linearDamping = 0
         
+        //Get enemy to collide with rocket
+        sprite.physicsBody?.contactTestBitMask = 1
+        
+        //Prevent enemy ships from colliding with each other
+        sprite.physicsBody?.contactTestBitMask = 1
+        
+        
+    }
+    
+    //Causes player's rocket to get destroyed when they collide with something
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        guard let nodeA = contact.bodyA.node else { return }
+        guard let nodeB = contact.bodyB.node
+            else { return }
+        
+        if nodeA == player {
+            playerHit(nodeB)
+        } else {
+            playerHit(nodeA)
+        }
+    }
+    
+    func playerHit(_ node: SKNode) {
+        player.removeFromParent()
     }
     
     
+    
+    
 }
-
